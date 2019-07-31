@@ -39,7 +39,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>de.mieslinger.jmymysqlimport</mainClass>
+                            <mainClass>de.mieslinger.jmymysqlimport.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
