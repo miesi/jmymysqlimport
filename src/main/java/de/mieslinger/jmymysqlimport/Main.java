@@ -48,6 +48,12 @@ public class Main {
         // fields in file -> tab separate
         // file can be generated with
         // mysql -h xy -u user -p -BNrq -e "select fields from table where condition=x" database
+
+        // TODO: db connectivity on cmdline
+        // TODO: other field separators as \t
+        // TODO: support enclosed fields
+        // TODO: add debug support
+
         try {
             HikariDataSource ds = DataBase.getDs();
             Connection cn = ds.getConnection();
