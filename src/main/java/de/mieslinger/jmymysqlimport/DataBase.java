@@ -44,7 +44,7 @@ public class DataBase {
     static {
         // Do your thing during webapp's startup.
         Properties zcProperties = new Properties();
-        String[] placesToTry = {"/home/mieslingert/.fhvdns.properties"};
+        String[] placesToTry = {"/home/mieslingert/.pdnsdb.properties"};
         for (String f : placesToTry) {
             try {
                 BufferedInputStream stream = new BufferedInputStream(new FileInputStream(f));
