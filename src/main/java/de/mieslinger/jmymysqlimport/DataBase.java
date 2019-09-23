@@ -23,26 +23,25 @@
  */
 package de.mieslinger.jmymysqlimport;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.Properties;
+import org.newsclub.net.mysql.AFUNIXDatabaseSocketFactory;
 
 /**
  *
  * @author mieslingert
  */
 public class DataBase {
-    
-    private static final String jdbcUrl;
-    private static final String dbUser;
-    private static final String dbPass;
+
     private static final String jdbcClass;
-    private static final HikariDataSource ds;
+    private static final String jdbcUrl;
+    private static Connection conn = null;
 
     static {
-        // Do your thing during webapp's startup.
+
         Properties zcProperties = new Properties();
         String[] placesToTry = {"/home/mieslingert/.pdnsdb.properties"};
         for (String f : placesToTry) {
@@ -50,38 +49,32 @@ public class DataBase {
                 BufferedInputStream stream = new BufferedInputStream(new FileInputStream(f));
                 zcProperties.load(stream);
                 stream.close();
-                break;  // Abbrechen des ladens nach dem ersten erfolgreichen Dateiöffnens
+                break;
             } catch (Exception ex) {
             }
         }
-
-        jdbcUrl = zcProperties.getProperty("jdbcUrl", "jdbc:mysql://localhost:3306/pdns_test_db");
-        dbUser = zcProperties.getProperty("dbUser", "root");
-        dbPass = zcProperties.getProperty("dbPass", "");
         jdbcClass = zcProperties.getProperty("jdbcClass", "com.mysql.jdbc.Driver");
+        jdbcUrl = zcProperties.getProperty("jdbcUrl", "jdbc:mysql://");
 
-        // Setup HikariCP
-        HikariConfig config = new HikariConfig();
+        zcProperties.setProperty("cachePrepStmts", "true");
+        zcProperties.setProperty("prepStmtCacheSize", "250");
+        zcProperties.setProperty("prepStmtCacheSqlLimit", "2048");
+        zcProperties.setProperty("useServerPrepStmts", "true");
+        zcProperties.setProperty("useUnicode", "yes");
+        zcProperties.setProperty("characterEncoding", "utf8");
 
-        config.setJdbcUrl(jdbcUrl);
-        config.setUsername(dbUser);
-        config.setPassword(dbPass);
-
-        config.addDataSourceProperty("cachePrepStmts", "true");
-        config.addDataSourceProperty("prepStmtCacheSize", "250");
-        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-        config.addDataSourceProperty("useServerPrepStmts", "true");
-        config.addDataSourceProperty("useUnicode", "yes");
-        config.addDataSourceProperty("characterEncoding", "utf8");
-        config.setDriverClassName(jdbcClass);
-
-        ds = new HikariDataSource(config);
-
-        ds.setMaximumPoolSize(500);
+        try {
+            Class.forName(jdbcClass).newInstance();
+            conn = DriverManager.getConnection(jdbcUrl, zcProperties);
+        } catch (Exception e) {
+            System.err.println("initialization failed, exiting.");
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 
-    public static HikariDataSource getDs() {
-        return ds;
+    public static Connection getConnection() {
+        return conn;
     }
 
 }

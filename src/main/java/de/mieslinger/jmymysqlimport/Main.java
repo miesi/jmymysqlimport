@@ -1,6 +1,5 @@
 package de.mieslinger.jmymysqlimport;
 
-import com.zaxxer.hikari.HikariDataSource;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.sql.Connection;
@@ -45,18 +44,15 @@ public class Main {
 
         // statement to prepare -> from cmdline #1
         // file to read -> from cmdline #2
-        // fields in file -> tab separate
+        // fields in file -> tab separated
         // file can be generated with
         // mysql -h xy -u user -p -BNrq -e "select fields from table where condition=x" database
-
         // TODO: db connectivity on cmdline
         // TODO: other field separators as \t
         // TODO: support enclosed fields
         // TODO: add debug support
-
         try {
-            HikariDataSource ds = DataBase.getDs();
-            Connection cn = ds.getConnection();
+            Connection cn = DataBase.getConnection();
             cn.setAutoCommit(false);
 
             PreparedStatement insZone = cn.prepareStatement(args[0]);

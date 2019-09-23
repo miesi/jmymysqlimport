@@ -11,12 +11,21 @@ I guess this tool has been written many times before, unfortunately I'm unable
 to find those.
 
 Edit your .pdnsdb.properties file to contain something like this
-```
-dbUser:user
-dbPass:changeMe
-jdbcUrl:jdbc:mysql://db-server.example.com:3306/db?useServerPrepStmts=true
-jdbcClass:com.mysql.jdbc.Driver
 
+UnixDomain socket
+```
+user:john
+password:doe
+jdbcUrl:jdbc:mysql:///databasename
+socketFactory:org.newsclub.net.mysql.AFUNIXDatabaseSocketFactory
+junixsocket.file:/srv/mysql/databasename/run/mysql-database.socket
+```
+
+TCP/IP Version
+```
+user:john
+password:doe
+jdbcUrl:jdbc:mysql://server.example.com:3306/example_database
 ```
 
 Create a tab separated data file
