@@ -33,6 +33,7 @@ Create a tab separated data file
 mysql -h my-db-server.example.com -p -BNrqe "select domain_id,name,type,content,ttl,prio,change_date,disabled,ordername,auth,rev_name from records where domain_id in (1,2,3,4)" my_pdns_database >/home/johndoe/file-with-data
 ```
 
+Insert the data into another place
 ```
 java -jar jmymysqlimport-1.0-SNAPSHOT-jar-with-dependencies.jar "insert into records(domain_id,name,type,content,ttl,prio,change_date,disabled,ordername,auth,rev_name) values (?,?,?,?,?,?,?,?,?,?,?)" /home/johndoe/file-with-data
 ```
